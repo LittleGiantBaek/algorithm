@@ -1,37 +1,23 @@
 package baekJoon_15649;
 
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Scanner;
 
 public class Main {
 	static int N, M;
-	static Queue<Integer> queue = new LinkedList<>();
-	static int nums[];
+	static boolean checked[];
 
-	public static void NM() {
-		for (int i = 1; i <= N; i++) {
-			if (queue.size() == M) {
-				for (int j = 0; j < M; j++) {
-					int k = queue.poll();
-					System.out.print(k + " ");
-					if (j != M - 1) {
-						queue.offer(nums[k]);
-					}
-				}
-				System.out.println();
-				return;
-			}
-			if (queue.contains(nums[i])) {
-				continue;
-			}
-			queue.offer(nums[i]);
-			NM();
+	public static void dfs(String str) {
+		if (str.length() == M) {
+			System.out.println(str);
+			return;
 		}
-		for (int j = 0; j < queue.size(); j++) {
-			int k = queue.poll();
-			if (j != queue.size()) {
-				queue.offer(nums[k]);
+		for (int i = 1; i <= N; i++) {
+			if (checked[i] == false) {
+				str += i + " ";
+				checked[i] = true;
+				dfs(str);
+				str = str.substring(0, str.length() - 2);
+				checked[i] = false;
 			}
 		}
 	}
@@ -41,14 +27,47 @@ public class Main {
 
 		N = sc.nextInt();
 		M = sc.nextInt();
-		nums = new int[N + 1];
-		for (int i = 0; i <= N; i++) {
-			nums[i] = i;
-		}
-		for (int i = 1; i <= N; i++) {
-			queue.offer(nums[i]);
-			NM();
-			queue.poll();
-		}
+		M = M * 2;
+		checked = new boolean[N + 1];
+		dfs("");
 	}
 }
+
+/*
+ import java.io.*;
+import java.util.*;
+// _15649_N°úM1
+public class Main {
+
+	static int N,M;
+	static int visited[];
+	static void dfs(String str) {
+		if(str.length() == M) {
+			System.out.println(str);
+			return;
+		}
+		for(int i = 1 ; i <= N ; i++) {
+			if(visited[i] == 0) {
+				visited[i] = 1;
+				String tmp = str;
+				str += (i+ " ");
+				dfs(str);
+				visited[i] = 0;
+				str = tmp;
+				
+			}
+		}
+	}
+	public static void main(String[] args) throws IOException{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		M = M*2;
+		visited = new int[N+1];
+		dfs("");
+	}
+
+}
+
+ */
