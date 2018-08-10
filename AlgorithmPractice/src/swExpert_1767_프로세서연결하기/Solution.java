@@ -15,7 +15,6 @@ import java.util.StringTokenizer;
  */
 public class Solution {
 	static int N;
-	static int map[];
 	static int dy[] = { -1, 0, 1, 0 };
 	static int dx[] = { 0, 1, 0, -1 };
 	static ArrayList<Node> proList = new ArrayList<>();
@@ -48,7 +47,7 @@ public class Solution {
 
 		while (tc-- > 0) {
 			N = Integer.parseInt(br.readLine());
-			map = new int[N * N];
+			int map[] = new int[N * N];
 			for (int i = 0; i < N; i++) {
 				st = new StringTokenizer(br.readLine());
 				for (int j = 0; j < N; j++) {
@@ -62,7 +61,7 @@ public class Solution {
 			}
 			cnt = proList.size();
 
-			dfs(0);
+			dfs(0, map);
 
 			System.out.println("#" + t + " " + min);
 
@@ -73,84 +72,84 @@ public class Solution {
 		} // while tc 종료
 	}
 
-	public static void dfs(int index) {
+	public static void dfs(int index, int[] nmap) {
 		if (cnt == 0) { // 프로세서 전부 검사한 후
 			if (lineNum > max) {
 				min = 99999; // lineNum max 가 바뀔경우 min 초기화
 				max = lineNum;
 			}
 			if (lineNum == max) { // 전원에 연결된 프로세서가 최대일때만 검사
-				cal();
+				cal(nmap);
 				min = Math.min(lineLen, min); // 라인 길이 최소값 저장
 			}
 			return;
 		}
-		int tmpMap[] = Arrays.copyOf(map, map.length); // 맵 복구 배열
-
+		int[] tmpMap = new int[N*N];
 		for (int i = index; i < proList.size(); i++) {
 			checked = false;
 			Node nNode = proList.get(i);
 			for (int dir = 0; dir < 4; dir++) {
-				if (isAvailavle(dir, nNode.y, nNode.x)) {
+				if (isAvailavle(dir, nNode.y, nNode.x, nmap)) {
 					checked = true;
-					makeLine(dir, nNode.y, nNode.x); // 맵에 라인 생성
+					tmpMap = Arrays.copyOf(nmap, nmap.length);
+					tmpMap = makeLine(dir, nNode.y, nNode.x, tmpMap);
 					lineNum++;
 					cnt--;
-					dfs(i + 1);
+					dfs(i + 1, tmpMap);
 					lineNum--;
 					cnt++;
-					map = Arrays.copyOf(tmpMap, map.length); // 맵복구
 				} else {
 					continue;
 				}
 			}
 			if (!checked) { // 상하좌우 검사시 라인 생성 못했을경우
 				cnt--;
-				dfs(i + 1);
+				dfs(i + 1, nmap);
 				cnt++;
 			}
 		}
 	}
 
-	private static void makeLine(int dir, int y, int x) {
+	private static int[] makeLine(int dir, int y, int x, int[] nmap) {
 		while (true) { // 이미 검사를 완료한 좌표만 선을 만들기 때문에 전원까지 선연결
 			y = y + dy[dir];
 			x = x + dx[dir];
 			if (y < 0 || x < 0 || y >= N || x >= N) {
 				break;
 			}
-			map[y * N + x] = 2;
+			nmap[y * N + x] = 2;
 		}
+		return nmap;
 	}
 
-	private static boolean isAvailavle(int dir, int y, int x) {
+	private static boolean isAvailavle(int dir, int y, int x, int[] nmap) {
 		while (true) {
 			y = y + dy[dir];
 			x = x + dx[dir];
 			if (y < 0 || x < 0 || y >= N || x >= N) {
 				return true;
 			}
-			if (map[y * N + x] == 2 || map[y * N + x] == 1) {
+			if (nmap[y * N + x] == 2 || nmap[y * N + x] == 1) {
 				return false;
 			}
 		}
 	}
 
-	public static void cal() {
+	public static void cal(int[] nmap) {
 		lineLen = 0;
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < N; j++) {
-				if (map[i * N + j] == 2) {
+				if (nmap[i * N + j] == 2) {
 					lineLen++;
 				}
 			}
 		}
 	}
 
-	public static void printMap() {
+	public static void printMap(int[] nmap) {
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < N; j++) {
-				System.out.print(map[i * N + j]);
+				System.out.print(nmap[i * N + j]);
 			}
 			System.out.println();
 		}
