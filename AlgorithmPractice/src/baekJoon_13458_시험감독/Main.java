@@ -6,37 +6,29 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Main {
-	static int N;
-	static long room[];
-	static long cap;
-	static long re;
 
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
-		N = Integer.parseInt(br.readLine());
-		room = new long[N];
-		re = N;
-		st = new StringTokenizer(br.readLine());
-		for (int i = 0; i < N; i++) {
-			room[i] = Integer.parseInt(st.nextToken());
-		}
+		StringTokenizer st1, st2;
 
-		st = new StringTokenizer(br.readLine());
-		cap = Integer.parseInt(st.nextToken());
+		int N = Integer.parseInt(br.readLine());
+		long room[] = new long[N];
+		long re = N;
+		st1 = new StringTokenizer(br.readLine());
+		st2 = new StringTokenizer(br.readLine());
+		long cap = Integer.parseInt(st2.nextToken());
+		long cap2 = Integer.parseInt(st2.nextToken());
+
 		for (int i = 0; i < N; i++) {
+			room[i] = Integer.parseInt(st1.nextToken());
 			room[i] = room[i] - cap;
 			if (room[i] < 0) {
 				room[i] = 0;
 			}
-		}
-		cap = Integer.parseInt(st.nextToken());
-
-		for (int i = 0; i < N; i++) {
-			if (room[i] % cap == 0) {
-				re = re + (room[i] / cap);
+			if (room[i] % cap2 == 0) {
+				re = re + (room[i] / cap2);
 			} else {
-				re = re + 1 + (room[i] / cap);
+				re = re + 1 + (room[i] / cap2);
 			}
 		}
 
