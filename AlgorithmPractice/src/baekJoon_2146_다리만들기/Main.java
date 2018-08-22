@@ -1,4 +1,4 @@
-package baekJoone_2146_다리만들기;
+package baekJoon_2146_다리만들기;
 
 import java.io.BufferedReader;
 import java.io.IOException;
