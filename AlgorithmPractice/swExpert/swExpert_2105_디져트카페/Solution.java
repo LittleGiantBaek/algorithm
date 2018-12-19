@@ -1,4 +1,4 @@
-package swExxpert_2105_디져트카페;
+package swExpert_2105_디져트카페;
 
 import java.io.BufferedReader;
 import java.io.IOException;
